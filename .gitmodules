@@ -1,0 +1,15 @@
+[submodule "qemu"]
+	path = qemu
+	url = https://github.com/jasonyu1996/qemu.git
+[submodule "musl"]
+	path = musl
+	url = https://github.com/riscvarchive/riscv-musl.git
+[submodule "libsodium"]
+	path = libsodium
+	url = https://github.com/jedisct1/libsodium
+[submodule "buildroot"]
+	path = buildroot
+	url = https://github.com/buildroot/buildroot.git
+[submodule "linux"]
+	path = linux
+	url = https://github.com/torvalds/linux.git

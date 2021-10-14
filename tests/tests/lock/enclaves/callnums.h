@@ -1,0 +1,10 @@
+#ifndef _H_CALLNUMS_
+#define _H_CALLNUMS_
+
+#define OCALL_GET_THREAD_COUNT 7
+#define OCALL_GET_MASTER_EID 8
+#define OCALL_GET_CONTENTION 9
+#define ICALL_GET_BUFFER 1
+
+#endif
+

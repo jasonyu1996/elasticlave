@@ -1,0 +1,10 @@
+*.swp
+riscv/
+.gdb_history
+build/
+buildroot_overlay/
+firesim-riscv-tools-prebuilt-2.0/
+.vscode
+*.o
+
+
