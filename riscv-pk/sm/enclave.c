@@ -139,6 +139,8 @@ static enclave_ret_code context_switch_to_enclave(uintptr_t* regs,
     performance_count(&encl->stats.switch_to_enclave);
     performance_check_start(&encl->stats.enclave_execution);
 
+    /*clear_csr(mie, MIP_MTIP);*/
+
     return ENCLAVE_SUCCESS;
 }
 
@@ -149,6 +151,7 @@ static void context_switch_to_host(uintptr_t* encl_regs,
     performance_count(&encl->stats.enclave_execution);
 
     performance_check_start(&encl->stats.switch_to_host);
+
 
     // set PMP
     int memid;
@@ -205,6 +208,8 @@ static void context_switch_to_host(uintptr_t* encl_regs,
 
     performance_check_end(&encl->stats.switch_to_host);
     performance_count(&encl->stats.switch_to_host);
+
+    /*set_csr(mie, MIP_MTIP);*/
 }
 
 

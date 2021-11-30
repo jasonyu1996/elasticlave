@@ -94,7 +94,7 @@ static inline void wfi()
 # define SOFT_FLOAT_CONTEXT_SIZE (8 * 32)
 #define HARD_FLOAT_CONTEXT_SIZE 0
 #endif
-#define HLS_SIZE 64
+#define HLS_SIZE 128
 #define INTEGER_CONTEXT_SIZE (32 * REGBYTES)
 
 #endif

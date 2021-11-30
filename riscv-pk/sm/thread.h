@@ -47,8 +47,8 @@ struct ctx
 };
 
 #ifdef __riscv_flen
-//#define THREAD_CTX_REGS_COUNT 65
-#define THREAD_CTX_REGS_COUNT 64
+#define THREAD_CTX_REGS_COUNT 65
+//#define THREAD_CTX_REGS_COUNT 64
 #else
 #define THREAD_CTX_REGS_COUNT 32
 #endif

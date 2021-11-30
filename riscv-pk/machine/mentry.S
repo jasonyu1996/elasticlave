@@ -45,6 +45,17 @@ trap_vector:
   STORE a0, 10*REGBYTES(sp)
   STORE a1, 11*REGBYTES(sp)
 
+  li a0, 3
+  sll a0, a0, 13
+  csrr a1, mstatus
+  or a0, a0, a1
+  csrw mstatus, a0
+  #csrr a0, mstatus
+  #srl a0, a0, 13
+  #and a0, a0, 3
+  #1: beqz a0, 1b
+  
+
   csrr a1, mcause
 
   bgez a1, .Lhandle_trap_in_machine_mode
@@ -129,7 +140,6 @@ trap_vector:
   STORE s1, 9*REGBYTES(sp)
   mv a0, sp                        # a0 <- regs
   STORE a2,12*REGBYTES(sp)
-  csrr a2, mepc                    # a2 <- mepc
   STORE a3,13*REGBYTES(sp)
   csrrw t0, mscratch, x0           # t0 <- user sp
   STORE a4,14*REGBYTES(sp)
@@ -152,6 +162,49 @@ trap_vector:
   STORE t6,31*REGBYTES(sp)
   STORE t0, 2*REGBYTES(sp)         # sp
 
+#fsd f0, 2*REGBYTES(sp)
+#STORE t0, 2*REGBYTES(sp)
+
+#if 1
+frcsr a2
+fsd f0, 32*REGBYTES(sp)
+fsd f1, 33*REGBYTES(sp)
+fsd f2, 34*REGBYTES(sp)
+fsd f3, 35*REGBYTES(sp)
+fsd f4, 36*REGBYTES(sp)
+fsd f5, 37*REGBYTES(sp)
+fsd f6, 38*REGBYTES(sp)
+fsd f7, 39*REGBYTES(sp)
+fsd f8, 40*REGBYTES(sp)
+fsd f9, 41*REGBYTES(sp)
+fsd f10, 42*REGBYTES(sp)
+fsd f11, 43*REGBYTES(sp)
+fsd f12, 44*REGBYTES(sp)
+fsd f13, 45*REGBYTES(sp)
+fsd f14, 46*REGBYTES(sp)
+fsd f15, 47*REGBYTES(sp)
+fsd f16, 48*REGBYTES(sp)
+fsd f17, 49*REGBYTES(sp)
+fsd f18, 50*REGBYTES(sp)
+fsd f19, 51*REGBYTES(sp)
+fsd f20, 52*REGBYTES(sp)
+fsd f21, 53*REGBYTES(sp)
+fsd f22, 54*REGBYTES(sp)
+fsd f23, 55*REGBYTES(sp)
+fsd f24, 56*REGBYTES(sp)
+fsd f25, 57*REGBYTES(sp)
+fsd f26, 58*REGBYTES(sp)
+fsd f27, 59*REGBYTES(sp)
+fsd f28, 60*REGBYTES(sp)
+fsd f29, 61*REGBYTES(sp)
+fsd f30, 62*REGBYTES(sp)
+fsd f31, 63*REGBYTES(sp)
+  STORE a2, 64*REGBYTES(sp)
+#endif
+
+  csrr a2, mepc                    # a2 <- mepc
+
+
 #ifndef __riscv_flen
   lw tp, (sp) # Move the emulated FCSR from x0's save slot into tp.
 #endif
@@ -169,6 +222,42 @@ restore_mscratch:
   csrw mscratch, sp
 
 restore_regs:
+#if 1
+LOAD a2, 64*REGBYTES(sp)
+fld f0, 32*REGBYTES(sp)
+fld f1, 33*REGBYTES(sp)
+fld f2, 34*REGBYTES(sp)
+fld f3, 35*REGBYTES(sp)
+fld f4, 36*REGBYTES(sp)
+fld f5, 37*REGBYTES(sp)
+fld f6, 38*REGBYTES(sp)
+fld f7, 39*REGBYTES(sp)
+fld f8, 40*REGBYTES(sp)
+fld f9, 41*REGBYTES(sp)
+fld f10, 42*REGBYTES(sp)
+fld f11, 43*REGBYTES(sp)
+fld f12, 44*REGBYTES(sp)
+fld f13, 45*REGBYTES(sp)
+fld f14, 46*REGBYTES(sp)
+fld f15, 47*REGBYTES(sp)
+fld f16, 48*REGBYTES(sp)
+fld f17, 49*REGBYTES(sp)
+fld f18, 50*REGBYTES(sp)
+fld f19, 51*REGBYTES(sp)
+fld f20, 52*REGBYTES(sp)
+fld f21, 53*REGBYTES(sp)
+fld f22, 54*REGBYTES(sp)
+fld f23, 55*REGBYTES(sp)
+fld f24, 56*REGBYTES(sp)
+fld f25, 57*REGBYTES(sp)
+fld f26, 58*REGBYTES(sp)
+fld f27, 59*REGBYTES(sp)
+fld f28, 60*REGBYTES(sp)
+fld f29, 61*REGBYTES(sp)
+fld f30, 62*REGBYTES(sp)
+fld f31, 63*REGBYTES(sp)
+fscsr a2
+#endif
   # Restore all of the registers.
   LOAD ra, 1*REGBYTES(sp)
   LOAD gp, 3*REGBYTES(sp)
@@ -201,6 +290,9 @@ restore_regs:
   LOAD t5,30*REGBYTES(sp)
   LOAD t6,31*REGBYTES(sp)
   LOAD sp, 2*REGBYTES(sp)
+
+
+
   mret
 
 #ifdef SM_ENABLED

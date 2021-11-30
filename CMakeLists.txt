@@ -4,7 +4,7 @@ include(ProcessorCount)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 if(NOT DEFINED ENV{RISCV})
-	message(FATAL_ERROR "set RISCV environment variable. \n Try `cd ${CMAKE_SOURCE_DIR}; source source.sh`")
+	message(FATAL_ERROR "set RISCV environment variable. \n Try `cd ${CMAKE_CURRENT_SOURCE_DIR}; source source.sh`")
 endif()
 
 if(NOT DEFINED platform)
@@ -28,20 +28,20 @@ else()
 endif()
 
 set(ISA rv${BITS}imafdc)
-set(confdir ${CMAKE_SOURCE_DIR}/conf)
-set(patchdir ${CMAKE_SOURCE_DIR}/patches)
+set(confdir ${CMAKE_CURRENT_SOURCE_DIR}/conf)
+set(patchdir ${CMAKE_CURRENT_SOURCE_DIR}/patches)
 set(cross_compile riscv${BITS}-unknown-linux-gnu-)
 
-set(bootrom_srcdir ${CMAKE_SOURCE_DIR}/bootrom)
-set(bootrom_wrkdir ${CMAKE_BINARY_DIR}/bootrom.build)
-set(qemu_wrkdir ${CMAKE_SOURCE_DIR}/qemu)
-set(qemu_srcdir ${CMAKE_SOURCE_DIR}/qemu)
-set(sm_srcdir ${CMAKE_SOURCE_DIR}/riscv-pk)
-set(sm_wrkdir ${CMAKE_BINARY_DIR}/riscv-pk.build)
-set(buildroot_srcdir ${CMAKE_SOURCE_DIR}/buildroot)
-set(buildroot_wrkdir ${CMAKE_BINARY_DIR}/buildroot.build)
+set(bootrom_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/bootrom)
+set(bootrom_wrkdir ${CMAKE_CURRENT_BINARY_DIR}/bootrom.build)
+set(qemu_wrkdir ${CMAKE_CURRENT_SOURCE_DIR}/qemu)
+set(qemu_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/qemu)
+set(sm_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/riscv-pk)
+set(sm_wrkdir ${CMAKE_CURRENT_BINARY_DIR}/riscv-pk.build)
+set(buildroot_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/buildroot)
+set(buildroot_wrkdir ${CMAKE_CURRENT_BINARY_DIR}/buildroot.build)
 set(buildroot_config ${confdir}/qemu_riscv${BITS}_virt_defconfig)
-set(overlay_dir ${CMAKE_BINARY_DIR}/overlay)
+set(overlay_dir ${CMAKE_CURRENT_BINARY_DIR}/overlay)
 set(overlay_root ${overlay_dir}/root)
 
 if(firesim)
@@ -60,15 +60,15 @@ if(NOT DEFINED linux_defconfig)
 	set(linux_defconfig ${confdir}/linux${BITS}-defconfig)
 endif()
 
-set(linux_srcdir ${CMAKE_SOURCE_DIR}/linux)
-set(linux_wrkdir ${CMAKE_BINARY_DIR}/linux.build)
+set(linux_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/linux)
+set(linux_wrkdir ${CMAKE_CURRENT_BINARY_DIR}/linux.build)
 set(linux_vmlinux ${linux_wrkdir}/vmlinux)
 set(linux_vmlinux_stripped ${linux_wrkdir}/vmlinux-stripped)
-set(driver_srcdir ${CMAKE_SOURCE_DIR}/linux-keystone-driver)
-set(driver_wrkdir ${CMAKE_BINARY_DIR}/linux-keystone-driver.build)
-set(tests_srcdir ${CMAKE_SOURCE_DIR}/tests)
-set(final_image ${CMAKE_BINARY_DIR}/bbl.bin)
-set(initramfs_sysroot ${CMAKE_BINARY_DIR}/initramfs-sysroot)
+set(driver_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/linux-keystone-driver)
+set(driver_wrkdir ${CMAKE_CURRENT_BINARY_DIR}/linux-keystone-driver.build)
+set(tests_srcdir ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set(final_image ${CMAKE_CURRENT_BINARY_DIR}/bbl.bin)
+set(initramfs_sysroot ${CMAKE_CURRENT_BINARY_DIR}/initramfs-sysroot)
 
 set(USE_RUST_SM FALSE CACHE BOOL "Use Rust version of the security monitor. WARNING: Applies globally.")
 if (${USE_RUST_SM})
@@ -212,7 +212,7 @@ add_custom_target("image" DEPENDS "sm" "tests" ${buildroot_srcdir} ${buildroot_w
 )
 
 # scripts
-set(scripts ${CMAKE_BINARY_DIR}/scripts)
+set(scripts ${CMAKE_CURRENT_BINARY_DIR}/scripts)
 add_custom_command(OUTPUT ${scripts} COMMAND mkdir -p ${scripts})
 
 if(initramfs)
@@ -255,10 +255,10 @@ else()
       chmod +x run-qemu.sh
   )
 endif()
-add_custom_command(OUTPUT ${scripts}/test-qemu.sh DEPENDS ${CMAKE_SOURCE_DIR}/scripts ${scripts}
-  COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/test-qemu.sh ${scripts})
-add_custom_command(OUTPUT ${scripts}/travis.sh DEPENDS ${CMAKE_SOURCE_DIR}/scripts ${scripts}
-  COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/travis.sh ${scripts})
+add_custom_command(OUTPUT ${scripts}/test-qemu.sh DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/scripts ${scripts}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-qemu.sh ${scripts})
+add_custom_command(OUTPUT ${scripts}/travis.sh DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/scripts ${scripts}
+  COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/scripts/travis.sh ${scripts})
 
 add_custom_target(
   "tools" ALL
@@ -270,6 +270,6 @@ add_custom_target(
   "run-tests"
   DEPENDS "tools" "image"
   COMMAND
-    ./scripts/travis.sh ${CMAKE_SOURCE_DIR}/tests
+    ./scripts/travis.sh ${CMAKE_CURRENT_SOURCE_DIR}/tests
   COMMENT "Running tests"
 )
