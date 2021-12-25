@@ -1,13 +1,8 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Singapore
 
-
-ENV ELASTICLAVE_TOOLS=/tools
-ENV RISCV=${ELASTICLAVE_TOOLS}/riscv
-ENV PATH=${RISCV}/bin:${PATH}
-WORKDIR ${ELASTICLAVE_TOOLS}
 
 RUN apt-get update && apt-get install -y autoconf automake autotools-dev bc \
     bison build-essential curl expat libexpat1-dev flex gawk gcc git \
@@ -17,9 +12,4 @@ RUN apt-get update && apt-get install -y autoconf automake autotools-dev bc \
     device-tree-compiler expect makeself unzip cpio rsync cmake \
     ninja-build
 
-ADD setup ${ELASTICLAVE_TOOLS}/
-ADD .prebuilt_tools_shasums ${ELASTICLAVE_TOOLS}/
-RUN ./setup
-
-RUN apt-get install -y libpng-dev
 
