@@ -1,7 +1,7 @@
 # Elasticlave
 
 **Elasticlave** is a Trusted Execution Environment (TEE) design which enables efficient cross-enclave data sharing.
-This repository contains the prototype implementation based on [Keystone](https://keystone-enclave.org/) as described in "Elasticlave : An Efficient Memory Model for Enclaves" (Usenix Security Symposium 2022, [preprint version on arXiv](https://arxiv.org/abs/2010.08440)). For simplicity, we directly refer to this prototype implementation as Elasticlave in this document.
+This repository contains the prototype implementation based on [Keystone](https://keystone-enclave.org/) as described in ["Elasticlave : An Efficient Memory Model for Enclaves"](https://www.usenix.org/conference/usenixsecurity22/presentation/yu-jason) at Usenix Security Symposium 2022). For simplicity, we directly refer to this prototype implementation as Elasticlave in this document.
 
 We support two options for running Elasticlave:
   1. On a RISC-V SoC simulated with [FireSim](https://fires.im/). This can give accurate performance data and is therefore suitable for performance benchmarking. However, it is generally much slower than the second option.
@@ -18,7 +18,7 @@ See the [official website of Docker](https://www.docker.com/) for instructions o
 
 ### Building
 ```bash
-git clone https://github.com/jasonyu1996/elasticlave.git
+git clone https://github.com/jasonyu1996/elasticlave.git --recursive --shallow-submodules
 cd elasticlave
 git submodule update --init --recursive
 ./docker.sh
