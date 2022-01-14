@@ -16,39 +16,6 @@ PACKAGE_FILES="
                test-runner.riscv \
 			   $EYRIE_DIR/eyrie-rt \
                test \
-               icall-server/enclaves/icall-server-s.eapp_riscv \
-               lock/host/lock.riscv \
-               lock/enclaves/lock-a.eapp_riscv \
-               lock/enclaves/lock-b.eapp_riscv \
-               iozone/iozone.eapp_riscv \
-               "
-
-OTHER_FILES="
-               icall-proxy-3-ne/host/icall-proxy-3-ne.riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-c.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-s.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-p.eapp_riscv \
-               icall-proxy-3-baseline/host/icall-proxy-3-baseline.riscv \
-               icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-c.eapp_riscv \
-               icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-s.eapp_riscv \
-               icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-p.eapp_riscv \
-               lock/host/lock.riscv \
-               lock/enclaves/lock-a.eapp_riscv \
-               lock/enclaves/lock-b.eapp_riscv \
-               icall-proxy-3-ne/host/icall-proxy-3-ne.riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-c.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-s.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-p.eapp_riscv \
-               icall-proxy-3/host/icall-proxy-3.riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-c.eapp_riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-s.eapp_riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-p.eapp_riscv \
-               icall-server-ne/host/icall-server-ne.riscv \
-               icall-server-ne/enclaves/icall-server-ne-c.eapp_riscv \
-               icall-server-ne/enclaves/icall-server-ne-s.eapp_riscv \
-               icall-consumer-ne/host/icall-consumer-ne.riscv \
-               icall-consumer-ne/enclaves/icall-consumer-ne-c.eapp_riscv \
-               icall-consumer-ne/enclaves/icall-consumer-ne-s.eapp_riscv \
                lock-futex/host/lock-futex.riscv \
                lock-futex/enclaves/lock-futex-a.eapp_riscv \
                lock-futex/enclaves/lock-futex-b.eapp_riscv \
@@ -60,24 +27,42 @@ OTHER_FILES="
                lock/enclaves/lock-a.eapp_riscv \
                lock/enclaves/lock-b.eapp_riscv \
                iozone/iozone.eapp_riscv \
-               icall-server/host/icall-server.riscv \
-               icall-server/enclaves/icall-server-c.eapp_riscv \
-               icall-server/enclaves/icall-server-s.eapp_riscv \
-               icall-proxy-3/host/icall-proxy-3.riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-c.eapp_riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-s.eapp_riscv \
-               icall-proxy-3/enclaves/icall-proxy-3-p.eapp_riscv \
-               icall-consumer/host/icall-consumer.riscv \
-               icall-consumer/enclaves/icall-consumer-c.eapp_riscv \
-               icall-consumer/enclaves/icall-consumer-s.eapp_riscv \
-               icall-proxy-3-ne/host/icall-proxy-3-ne.riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-c.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-s.eapp_riscv \
-               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-p.eapp_riscv \
+               iozone/iozone-baseline.eapp_riscv \
+               iozone/iozone.native \
+               "
+
+OTHER_FILES="
                icall-proxy-3-baseline/host/icall-proxy-3-baseline.riscv \
                icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-c.eapp_riscv \
                icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-s.eapp_riscv \
                icall-proxy-3-baseline/enclaves/icall-proxy-3-baseline-p.eapp_riscv \
+               icall-proxy-3-ne/host/icall-proxy-3-ne.riscv \
+               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-c.eapp_riscv \
+               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-s.eapp_riscv \
+               icall-proxy-3-ne/enclaves/icall-proxy-3-ne-p.eapp_riscv \
+               icall-proxy-3/host/icall-proxy-3.riscv \
+               icall-proxy-3/enclaves/icall-proxy-3-c.eapp_riscv \
+               icall-proxy-3/enclaves/icall-proxy-3-s.eapp_riscv \
+               icall-proxy-3/enclaves/icall-proxy-3-p.eapp_riscv \
+               icall-server-baseline/host/icall-server-baseline.riscv \
+               icall-server-baseline/enclaves/icall-server-baseline-c.eapp_riscv \
+               icall-server-baseline/enclaves/icall-server-baseline-s.eapp_riscv \
+               icall-server-ne/host/icall-server-ne.riscv \
+               icall-server-ne/enclaves/icall-server-ne-c.eapp_riscv \
+               icall-server-ne/enclaves/icall-server-ne-s.eapp_riscv \
+               icall-server/host/icall-server.riscv \
+               icall-server/enclaves/icall-server-c.eapp_riscv \
+               icall-server/enclaves/icall-server-s.eapp_riscv \
+               icall-consumer-baseline/host/icall-consumer-baseline.riscv \
+               icall-consumer-baseline/enclaves/icall-consumer-baseline-c.eapp_riscv \
+               icall-consumer-baseline/enclaves/icall-consumer-baseline-s.eapp_riscv \
+               icall-consumer-ne/host/icall-consumer-ne.riscv \
+               icall-consumer-ne/enclaves/icall-consumer-ne-c.eapp_riscv \
+               icall-consumer-ne/enclaves/icall-consumer-ne-s.eapp_riscv \
+               icall-consumer/host/icall-consumer.riscv \
+               icall-consumer/enclaves/icall-consumer-c.eapp_riscv \
+               icall-consumer/enclaves/icall-consumer-s.eapp_riscv \
+               iozone/iozone.native \
                "
 PACKAGE_SCRIPT="./test"
 

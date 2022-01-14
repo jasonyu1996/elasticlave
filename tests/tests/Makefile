@@ -75,6 +75,9 @@ all:  $(OBJS) $(SDK_HOST_LIB) $(SDK_EDGE_LIB) $(SDK_VERIFIER_LIB)
 	$(foreach test, $(NATIVE_TESTS),\
 		$(MAKE) -C $(test);\
 	)
+	$(foreach test, $(BASELINE_TESTS),\
+		$(MAKE) -C $(test);\
+	)
 	$(foreach test, $(EXTRA_TESTS),\
 		$(MAKE) -C $(test);\
 	)
@@ -86,6 +89,10 @@ all:  $(OBJS) $(SDK_HOST_LIB) $(SDK_EDGE_LIB) $(SDK_VERIFIER_LIB)
 	$(foreach test, $(NATIVE_TESTS), \
 		echo "echo 'testing native $(test)'" >> test;\
 		echo "./$(test).native" >> test; \
+	)
+	$(foreach test, $(BASELINE_TESTS), \
+		echo "echo 'testing baseline $(test)'" >> test;\
+		echo "./$(RUNNER) $(test)-baseline.eapp_riscv $(RUNTIME)" >> test; \
 	)
 	$(foreach test, $(EXTRA_TESTS), \
 		echo "echo 'testing $(test)'" >> test;\

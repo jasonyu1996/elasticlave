@@ -1,4 +1,5 @@
 APP=iozone.eapp_riscv
+APP_BASELINE=iozone-baseline.eapp_riscv
 NATIVE_APP=iozone.native
 
 CC	= cc
@@ -22,7 +23,7 @@ GCCLIB=-lgcc -lgcc_eh
 APP_LDS ?= ./app.lds
 
 
-CFLAGS_EXTRA ?= -DHYBRID_IO
+CFLAGS_EXTRA ?= 
 
 CKEYSTONEX = riscv64-unknown-linux-gnu-gcc
 LDKEYSTONEX = riscv64-unknown-linux-gnu-ld
@@ -37,7 +38,7 @@ LDFLAGS_KEYSTONEX = -g -nostartfiles -nostdlib -shared -Wl,-Bstatic -Wl,-Bsymbol
 # and you want iozone to use them, add -DHAVE_PREADV -DHAVE_PWRITEV
 # to CFLAGS
 
-all: $(APP) $(NATIVE_APP)
+all: $(APP) $(APP_BASELINE) $(NATIVE_APP)
 clean:
 	rm -f *.o *.no $(APP) $(NATIVE_APP) fileop pit_server
 
@@ -55,6 +56,9 @@ rpm:
 $(APP):	iozone_keystonex.o libbif.o $(MUSLIB) $(SDK_APP_LIB) $(SDK_EDGE_LIB)
 	$(CKEYSTONEX) $(LDFLAGS_KEYSTONEX) $(CRT) iozone_keystonex.o libbif.o $(MUSLIB) $(GCCLIB) $(SDK_APP_LIB) $(SDK_EDGE_LIB) -T $(APP_LDS) -o $(APP)
 
+$(APP_BASELINE):	iozone_keystonex_baseline.o libbif.o $(MUSLIB) $(SDK_APP_LIB) $(SDK_EDGE_LIB)
+	$(CKEYSTONEX) $(LDFLAGS_KEYSTONEX) $(CRT) iozone_keystonex_baseline.o libbif.o $(MUSLIB) $(GCCLIB) $(SDK_APP_LIB) $(SDK_EDGE_LIB) -T $(APP_LDS) -o $(APP_BASELINE)
+
 $(NATIVE_APP): iozone.no libbif.no
 	$(CC_HOST) $(CFLAGS_HOST) $(LDFLAGS_HOST) -o $@ $^
 
@@ -68,8 +72,18 @@ iozone_keystonex.o:	iozone.c libbif.c
 	@echo "Building iozone for KeystoneX"
 	@echo ""
 	$(CKEYSTONEX) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C \
-		-Dlinux -DNO_THREADS $(CFLAGS_KEYSTONEX) iozone.c \
+		-Dlinux -DNO_THREADS $(CFLAGS_KEYSTONEX) -DHYBRID_IO iozone.c \
 		-DNAME='"linux"' -o iozone_keystonex.o
+	$(CKEYSTONEX) -c -Dlinux -DHAVE_ANSIC_C -DNO_THREADS \
+		$(CFLAGS_KEYSTONEX) -DHYBRID_IO libbif.c -o libbif.o
+
+iozone_keystonex_baseline.o:	iozone.c libbif.c
+	@echo ""
+	@echo "Building iozone for KeystoneX"
+	@echo ""
+	$(CKEYSTONEX) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C \
+		-Dlinux -DNO_THREADS $(CFLAGS_KEYSTONEX) iozone.c \
+		-DNAME='"linux"' -o iozone_keystonex_baseline.o
 	$(CKEYSTONEX) -c -Dlinux -DHAVE_ANSIC_C -DNO_THREADS \
 		$(CFLAGS_KEYSTONEX) libbif.c -o libbif.o
 
