@@ -95,6 +95,7 @@ int main(){
 
     printf("******* EAPP ********\n");
     performance_stats_print_total(&stats, "Total Running");
+    fflush(stdout);
 
     _exit(0);
 

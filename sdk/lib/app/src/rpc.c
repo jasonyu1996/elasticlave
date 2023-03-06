@@ -139,7 +139,7 @@ void rpc_serve(){
         struct ecall_ret* ecall_ret;
         size_t args_size;
         if(source < 0 || source >= MAX_ENCLAVES){
-            printf("Bad source!\n");
+            printf("Bad source %d!\n", source);
             fflush(stdout);
             while(1);
         }

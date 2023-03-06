@@ -20,46 +20,46 @@ int enclave_n;
 size_t record_size;
 
 int edge_init(Keystone* enclave, DefaultEdgeCallDispatcher* dispatcher){
-  enclave->registerOcallDispatch(dispatcher);
-  dispatcher->register_call(OCALL_GET_RECORD_SIZE, get_record_size_wrapper, NULL);
-  dispatcher->register_call(OCALL_GET_OTHER_ENCLAVE, get_other_enclave_wrapper, NULL);
-  return 0;
+    enclave->registerOcallDispatch(dispatcher);
+    dispatcher->register_call(OCALL_GET_RECORD_SIZE, get_record_size_wrapper, NULL);
+    dispatcher->register_call(OCALL_GET_OTHER_ENCLAVE, get_other_enclave_wrapper, NULL);
+    return 0;
 }
 
 int get_record_size_wrapper(Keystone* encalve, void* buffer, struct shared_region* shared_region){
     struct edge_call* edge_call = (struct edge_call*)buffer;
-	uintptr_t data_section = edge_call_data_ptr(shared_region);
-	*(size_t*)data_section = record_size;
-	if(edge_call_setup_ret(edge_call,
-				(void*)data_section, sizeof(record_size), shared_region)){
-		edge_call->return_data.call_status = CALL_STATUS_BAD_OFFSET;
-	} else{
-		edge_call->return_data.call_status = CALL_STATUS_OK;
-	}
-	return 0;
+    uintptr_t data_section = edge_call_data_ptr(shared_region);
+    *(size_t*)data_section = record_size;
+    if(edge_call_setup_ret(edge_call,
+                (void*)data_section, sizeof(record_size), shared_region)){
+        edge_call->return_data.call_status = CALL_STATUS_BAD_OFFSET;
+    } else{
+        edge_call->return_data.call_status = CALL_STATUS_OK;
+    }
+    return 0;
 }
 
 int get_other_enclave_wrapper(Keystone* enclave, void* buffer, struct shared_region* shared_region){
     struct edge_call* edge_call = (struct edge_call*)buffer;
-	int i;
-	for(i = 0; i < enclave_n; i ++){
-		if(enclaves[i] != enclave){
-			break;
-		}
-	}
-	if(i >= enclave_n){
-		edge_call->return_data.call_status = CALL_STATUS_ERROR;
-	} else{
-		uintptr_t data_section = edge_call_data_ptr(shared_region);
-		int sid = enclaves[i]->getSID();
-		memcpy((void*)data_section, &sid, sizeof(sid));
-		if(edge_call_setup_ret(edge_call,
-				   	(void*)data_section, sizeof(sid), shared_region)){
-			edge_call->return_data.call_status = CALL_STATUS_BAD_OFFSET;
-		} else{
-			edge_call->return_data.call_status = CALL_STATUS_OK;
-		}
-	}
-return 0;
+    int i;
+    for(i = 0; i < enclave_n; i ++){
+        if(enclaves[i] != enclave){
+            break;
+        }
+    }
+    if(i >= enclave_n){
+        edge_call->return_data.call_status = CALL_STATUS_ERROR;
+    } else{
+        uintptr_t data_section = edge_call_data_ptr(shared_region);
+        int sid = enclaves[i]->getSID();
+        memcpy((void*)data_section, &sid, sizeof(sid));
+        if(edge_call_setup_ret(edge_call,
+                    (void*)data_section, sizeof(sid), shared_region)){
+            edge_call->return_data.call_status = CALL_STATUS_BAD_OFFSET;
+        } else{
+            edge_call->return_data.call_status = CALL_STATUS_OK;
+        }
+    }
+    return 0;
 }
 
