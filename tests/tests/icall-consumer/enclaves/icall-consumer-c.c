@@ -84,7 +84,8 @@ int main()
     }
 
     performance_stats_print(&stats, "Total");
-    /*icall_print_stats(oeid);*/
+    fflush(stdout);
+    // icall_print_stats(server_eid);
 
     icall_quit();
 

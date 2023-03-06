@@ -78,7 +78,8 @@ int main(){
 	  performance_count(&stats);
   }
   
-  /*performance_stats_print(&stats, "Total");*/
+  performance_stats_print(&stats, "Total");
+  fflush(stdout);
   /*icall_print_stats(oeid);*/
 
 	icall_quit();

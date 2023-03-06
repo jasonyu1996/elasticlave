@@ -104,7 +104,8 @@ int main()
 
 	/*printf(" ==== Client ==== \n");*/
 	/*print_stats();*/
-	/*performance_stats_print(&stats, "Total");*/
+	performance_stats_print(&stats, "Total");
+	fflush(stdout);
 	/*rpc_stats_print(RPC_WRITE);*/
 
 	rpc_quit();
