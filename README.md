@@ -11,7 +11,10 @@ The setup of Elasticlave differs depending on the option chosen.
 
 ## On FireSim
 ### Requirements and Dependencies
-You need to set up FireSim on AWS EC2. Elasticlave has been tested on FireSim 1.9.0. Please refer to the [FireSim documentation](https://docs.fires.im/en/1.9.0/) for instructions.
+You need to set up FireSim on AWS EC2. Elasticlave and the associated scripts in this repository
+have been tested on FireSim 1.9.0, which is included as a submodule in `firesim/` along with the
+Elasticlave-specific configuration files.
+Please refer to the [FireSim documentation](https://docs.fires.im/en/1.9.0/) for instructions.
 
 We have dockerised the remaining software dependencies.
 See the [official website of Docker](https://www.docker.com/) for instructions on installing Docker on your system.
@@ -21,12 +24,17 @@ See the [official website of Docker](https://www.docker.com/) for instructions o
 git clone https://github.com/jasonyu1996/elasticlave.git --recursive --shallow-submodules
 cd elasticlave
 git submodule update --init --recursive
-./docker.sh
+./docker.sh MAKE_FIRESIM=1
 ```
 
 ### Launching
 ```bash
 ./run-firesim.sh
+```
+By default, this uses FireSim in `firesim/`. If you have set up FireSim in a different directory, 
+specify the `FIRESIM_HOME` environment variable:
+```bash
+FIRESIM_HOME=<your-firesim-directory> ./run-firesim.sh
 ```
 
 ## On QEMU
