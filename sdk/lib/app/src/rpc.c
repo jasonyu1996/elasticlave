@@ -55,6 +55,8 @@ static unsigned char server_pubkey[crypto_kx_PUBLICKEYBYTES];
 static unsigned char worker_rx[MAX_ENCLAVES][crypto_kx_SESSIONKEYBYTES];
 static unsigned char worker_tx[MAX_ENCLAVES][crypto_kx_SESSIONKEYBYTES];
 static int worker_channel_ready[MAX_ENCLAVES];
+static int worker_channel_eid[MAX_ENCLAVES];
+static int worker_channel_num;
 
 static unsigned char worker_pubkeys[MAX_ENCLAVES][crypto_kx_PUBLICKEYBYTES];
 static unsigned char manager_seckey[crypto_kx_SECRETKEYBYTES];
@@ -130,6 +132,18 @@ void rpc_server_handler_register(int rpc_no, rpc_handler handler){
     rpc_handler_table[rpc_no] = handler;
 }
 
+int rpc_source_get_id(int source){
+    int i;
+    for(i = 0; i < worker_channel_num && worker_channel_eid[i] != source; i ++);
+    if(i < worker_channel_num)
+        return i;
+    if(worker_channel_num < MAX_ENCLAVES) {
+        worker_channel_eid[worker_channel_num ++] = source;
+        return worker_channel_num - 1;
+    }
+    return -1;
+}
+
 void rpc_serve(){
     ecall_serve(&rpc_data.ecall_parcel, RPC_DATA_BUFFER_SIZE);
     do{
@@ -138,20 +152,21 @@ void rpc_serve(){
         struct ecall_args* ecall_args;
         struct ecall_ret* ecall_ret;
         size_t args_size;
-        if(source < 0 || source >= MAX_ENCLAVES){
+        int id = rpc_source_get_id(source);
+        if(id < 0){
             printf("Bad source %d!\n", source);
             fflush(stdout);
             while(1);
         }
         if(secure){
-            if(!worker_channel_ready[source]){
+            if(!worker_channel_ready[id]){
                 printf("Secure channel unavailable!\n");
                 fflush(stdout);
                 while(1);
             }
             struct crypto_parcel* crypto_parcel = (struct crypto_parcel*)rpc_data.ecall_parcel.data;
             ecall_args = ecall_args_from_parcel(&secure_rpc_data.ecall_parcel);
-            size_t unpacked_size = rpc_crypto_data_unpack(crypto_parcel, ecall_args, rpc_data.ecall_parcel.size - sizeof(struct crypto_parcel), RPC_DATA_BUFFER_SIZE, worker_rx[source]);
+            size_t unpacked_size = rpc_crypto_data_unpack(crypto_parcel, ecall_args, rpc_data.ecall_parcel.size - sizeof(struct crypto_parcel), RPC_DATA_BUFFER_SIZE, worker_rx[id]);
             assert(unpacked_size >= sizeof(struct ecall_args));
             args_size = unpacked_size - sizeof(struct ecall_args);
 
@@ -179,7 +194,7 @@ void rpc_serve(){
             if(secure){
                 // need to encrypt the return data
                 struct crypto_parcel* crypto_parcel = (struct crypto_parcel*)rpc_data.retval.retval;
-                size_t packed_size = rpc_crypto_data_pack(crypto_parcel, ecall_ret->retval, data_size, RPC_DATA_BUFFER_SIZE, worker_tx[source]);
+                size_t packed_size = rpc_crypto_data_pack(crypto_parcel, ecall_ret->retval, data_size, RPC_DATA_BUFFER_SIZE, worker_tx[id]);
                 rpc_data.retval.ret_size = packed_size + sizeof(struct crypto_parcel);
             }
 
@@ -204,19 +219,20 @@ static size_t rpc_create_channel_handler(int source, void* args_data,
     struct create_channel_args* args = (struct create_channel_args*)args_data;
     struct create_channel_ret* ret = (struct create_channel_ret*)ret_data;
 
-    if(source < 0 || source >= MAX_ENCLAVES || worker_channel_ready[source]){
+    int id = rpc_source_get_id(source);
+    if(id < 0 || worker_channel_ready[id]){
         goto create_channel_fail;
     }
 
-    memcpy(worker_pubkeys[source], args->pubkey, crypto_kx_PUBLICKEYBYTES);
-    if(crypto_kx_server_session_keys(worker_rx[source], worker_tx[source], manager_pubkey, manager_seckey, worker_pubkeys[source])){
+    memcpy(worker_pubkeys[id], args->pubkey, crypto_kx_PUBLICKEYBYTES);
+    if(crypto_kx_server_session_keys(worker_rx[id], worker_tx[id], manager_pubkey, manager_seckey, worker_pubkeys[id])){
         int i;
         fprintf(stderr, "Error creating server session keys\n");
         goto create_channel_fail;
     }
 
     ret->success = 1;
-    worker_channel_ready[source] = 1;
+    worker_channel_ready[id] = 1;
     memcpy(ret->pubkey, manager_pubkey, crypto_kx_PUBLICKEYBYTES);
 
     return sizeof(struct create_channel_ret);
