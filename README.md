@@ -23,7 +23,7 @@ See the [official website of Docker](https://www.docker.com/) for instructions o
 ```bash
 git clone https://github.com/jasonyu1996/elasticlave.git --recursive --shallow-submodules
 cd elasticlave
-git submodule update --init --recursive
+git submodule update --init
 ./docker.sh MAKE_FIRESIM=1
 ```
 
@@ -47,7 +47,7 @@ See the [official website of Docker](https://www.docker.com/) for instructions o
 ```bash
 git clone https://github.com/jasonyu1996/elasticlave.git
 cd elasticlave
-git submodule update --init --recursive
+git submodule update --init
 ./docker.sh
 ```
 
